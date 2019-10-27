@@ -1,6 +1,8 @@
 import pygame, sys
 import constants
 from pygame.locals import *
+from Koopa import RegularKoopa
+from enemies import Goomba
 from Timer import Timer
 
 
@@ -51,7 +53,15 @@ def check_keyup(event, mario):
         pass
 
 
-def check_mario_enemy_collision(screen, mario, enemies):
+def check_koopa_enemy_collision(enemies, koopas):
+    for koopa in koopas:
+        for enemy in enemies:
+            if koopa.shell_mode_moving:
+                if pygame.sprite.collide_rect(enemy, koopa):
+                    enemy.died = True
+
+
+def check_mario_enemy_collision(screen, mario, enemies, koopas):
     for enemy in enemies:
         #if pygame.sprite.collide_rect(mario, enemy):
         if mario.rect.colliderect(enemy):
@@ -66,10 +76,37 @@ def check_mario_enemy_collision(screen, mario, enemies):
                 # mario death, reset level
                 # reset to beginning of level
                 else:
-                    mario.death_animation()
-                    enemies.clear()
-                    create_goomba(screen=screen,enemies=enemies)
-                    mario.reset_level()
+                    pass
+                    # mario.death_animation()
+                    # enemies.clear()
+                    # create_goomba(screen=screen,enemies=enemies)
+                    # mario.reset_level()
+
+    for koopa in koopas:
+        if mario.rect.colliderect(koopa):
+            print("hi")
+            if mario.rect.bottom > koopa.rect.top - 10:
+                mario.jump()
+                koopa.shell_mode = True
+            elif mario.rect.right >= koopa.rect.left and not mario.invincible:
+                if mario.break_brick:
+                    mario.become_small()
+                    break
+                else:
+                    pass
+                    # mario.death_animation()
+                    # enemies.clear()
+                    # create_koopa(screen=screen, koopas=koopas)
+                    # mario.reset_level()
+            if mario.rect.bottom > koopa.rect.top - 5 and mario.center > koopa.x and koopa.shell_mode:
+                koopa.shell_mode = False
+                koopa.direction = 1
+                koopa.shell_mode_moving = True
+            if mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.x and koopa.shell_mode:
+                koopa.shell_mode = False
+                koopa.direction = -1
+                koopa.shell_mode_moving = True
+
 
 def check_mario_item_collision(screen, mario, items):
     for item in items:
@@ -78,10 +115,109 @@ def check_mario_item_collision(screen, mario, items):
             mario.become_big()
             items.remove(item)
 
+
 def create_goomba(screen, enemies):
     # create instance of Goomba class
     goomba = Goomba(screen=screen)
     enemies.append(goomba)
+
+
+def create_koopa(screen, koopas):
+    koopa = RegularKoopa(screen=screen)
+    koopas.append(koopa)
+
+
+def check_collisiontype_goomba(level, enemies):
+    for blocks in level.environment:
+        for enemy in enemies:
+            if (pygame.sprite.collide_rect(enemy, blocks)):
+                # floor
+                if str(type(blocks)) == "<class 'Brick.Floor'>" and enemy.rect.bottom >= blocks.rect.top:
+                    enemy.floor = True
+                    enemy.rect.y = blocks.rect.y - 32
+                # sides
+                if str(type(blocks)) == "<class 'Brick.Pipe'>" \
+                        and (enemy.rect.left <= blocks.rect.right or enemy.rect.right >= blocks.rect.left) \
+                        and enemy.rect.bottom > blocks.rect.top \
+                        and enemy.rect.top > blocks.rect.top - 16:
+                    if enemy.rect.right >= blocks.rect.left \
+                            and not enemy.obstacleL \
+                            and enemy.rect.left < blocks.rect.left:
+                        enemy.rect.right = blocks.rect.left - 1
+                        enemy.obstacleR = True
+                    else:
+                        enemy.obstacleR = False
+                    if enemy.rect.left <= enemy.rect.right \
+                            and not enemy.obstacleR \
+                            and enemy.rect.right > blocks.rect.right:
+                        enemy.rect.left = blocks.rect.right + 1
+                        enemy.obstacleL = True
+                    else:
+                        enemy.obstacleL = False
+                else:
+                    enemy.obstacleR = False
+                    enemy.obstacleL = False
+                if enemy.obstacleR or enemy.obstacleL:
+                    print("im colliding")
+                # top of pipe
+                if str(type(blocks)) == "<class 'Brick.Pipe'>" \
+                        and (enemy.rect.left < blocks.rect.right - 5 and enemy.rect.right > blocks.rect.left + 5) \
+                        and enemy.rect.bottom > blocks.rect.top - 32 \
+                        and not enemy.obstacleL and not enemy.obstacleR:
+                    enemy.floor = True
+                    enemy.rect.y = blocks.rect.y - 32
+
+            # bounds
+            if enemy.rect.left < 0:
+                enemy.obstacleL = True
+                enemy.rect.left = 0
+
+def check_collisiontype_koopa(level, koopas):
+    for blocks in level.environment:
+        for koopa in koopas:
+            if (pygame.sprite.collide_rect(koopa, blocks)):
+                # floor
+                if str(type(blocks)) == "<class 'Brick.Floor'>" and koopa.rect.bottom >= blocks.rect.top:
+                    koopa.floor = True
+                    koopa.rect.y = blocks.rect.y - 32
+                # sides
+                if str(type(blocks)) == "<class 'Brick.Pipe'>" \
+                        and (koopa.rect.left <= blocks.rect.right or koopa.rect.right >= blocks.rect.left) \
+                        and koopa.rect.bottom > blocks.rect.top \
+                        and koopa.rect.top > blocks.rect.top - 16:
+                    if koopa.rect.right >= blocks.rect.left \
+                            and not koopa.obstacleL \
+                            and koopa.rect.left < blocks.rect.left:
+                        koopa.rect.right = blocks.rect.left - 1
+                        koopa.obstacleR = True
+                    else:
+                        koopa.obstacleR = False
+                    if koopa.rect.left <= blocks.rect.right \
+                            and not koopa.obstacleR \
+                            and koopa.rect.right > blocks.rect.right:
+                        koopa.rect.left = blocks.rect.right + 1
+                        koopa.obstacleL = True
+                    else:
+                        koopa.obstacleL = False
+                else:
+                    koopa.obstacleR = False
+                    koopa.obstacleL = False
+                if koopa.obstacleR or koopa.obstacleL:
+                    print("im colliding")
+                # top of pipe
+                if str(type(blocks)) == "<class 'Brick.Pipe'>" \
+                        and (koopa.rect.left < blocks.rect.right - 5 and koopa.rect.right > blocks.rect.left + 5) \
+                        and koopa.rect.bottom > blocks.rect.top - 32 \
+                        and not koopa.obstacleL and not koopa.obstacleR:
+                    koopa.floor = True
+                    koopa.rect.y = blocks.rect.y - 32
+
+            # bounds
+            if koopa.rect.left < 0:
+                koopa.obstacleL = True
+                koopa.rect.left = 0
+
+
 
 def check_collisiontype(level, mario):
     for blocks in level.environment:
@@ -138,12 +274,18 @@ def update_enemies(enemies):
     for enemy in enemies:
         enemy.update()
 
+def update_koopas(koopas):
+    for koopa in koopas:
+        koopa.update()
+
 def update_items(items):
     for item in items:
         item.update()
 
-def update_screen(screen, mario, level):
+def update_screen(screen, mario, level, koopas):
     screen.fill(constants.bg_color)
     level.blitme()
+    for koopa in koopas:
+        koopa.blitme()
     mario.blitme()
     pygame.display.flip()

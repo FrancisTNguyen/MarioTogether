@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
-from Spritesheet import SpriteSheet
-from timer import Timer
+from spritesheet import SpriteSheet
+from Timer import Timer
 
 
 class Enemy(Sprite):

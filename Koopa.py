@@ -1,7 +1,7 @@
 import pygame
 from pygame.sprite import Sprite
-from Spritesheet import SpriteSheet
-from timer import Timer
+from spritesheet import SpriteSheet
+from Timer import Timer
 
 
 class Koopa(Sprite):
@@ -16,7 +16,7 @@ class Koopa(Sprite):
         self.walk_list_left = walk_list_left
         self.walk_list_right = walk_list_right
         self.shell_list = shell_list
-
+        self.sur = pygame.Surface((32,32))
         # Timer class to animate sprites
         self.animation = Timer(frames=self.walk_list_left)
         self.animation = Timer(frames=self.walk_list_right)
@@ -38,18 +38,26 @@ class Koopa(Sprite):
 
         # movement flags
         self.moving_left = False
-        self.moving_right = False
+        self.moving_right = True
         self.direction = 1
 
         # shell flag
         self.shell_mode = False
         self.shell_mode_moving = False
 
+        #collision flags
+        self.floor = False
+        self.brick = False
+        self.obstacleL = False
+        self.obstacleR = False
+
     def blitme(self):
         if self.moving_left:
+            self.sur = self.imageLeft
             self.screen.blit(self.imageLeft, self.rect)
         if self.moving_right:
             self.screen.blit(self.imageRight, self.rect)
+            self.sur = self.imageRight
         # TODO: handle blitme when the koopa is in shell mode
         if self.shell_mode:
             self.screen.blit(self.imageShell, self.rect)
@@ -61,14 +69,18 @@ class Koopa(Sprite):
         # (2 * self.direction)
         self.rect.x = self.x
 
-        if self.rect.right >= self.screen_rect.centerx + 150:
+        if self.obstacleR:
             self.direction *= -1
             self.moving_left = True
             self.moving_right = False
-        elif self.rect.left <= self.screen_rect.centerx - 150:
+        elif self.obstacleL:
             self.direction *= -1
             self.moving_right = True
             self.moving_left = False
+        if self.obstacleR and self.shell_mode_moving:
+            self.direction *= - 1
+        if self.obstacleL and self.shell_mode_moving:
+            self.direction *= 1
         if self.moving_left:
             self.imageLeft = self.walk_list_left[self.animation.frame_index()]
         if self.moving_right:

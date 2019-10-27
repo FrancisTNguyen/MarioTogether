@@ -2,6 +2,7 @@ import pygame
 import Mario
 # import Enemies
 import Brick
+import Koopa
 # import Scoreboard
 BLACK = (0,0,0)
 CREATE = False
@@ -56,6 +57,15 @@ class Level():
                 if type == 'Floor':
                     self.create_floor(width=int(width),height=int(height),x=int(x),y=int(y))
 
+    def create_enemies(self):
+        with open('EnemySettings.txt') as f:
+            for line in f:
+                type, width, height, x, y = line.split()
+                if type == "Koopa":
+                    koopa = Koopa.RegularKoopa(self.screen)
+                    koopa.rect.x = int(x)
+                    koopa.rect.y = int(y)
+                    self.environment.append(koopa)
 
     def create_obstacle(self, width, height, x, y):
         box = Brick.Pipe(width, height, x, y)
