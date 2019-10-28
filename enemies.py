@@ -22,6 +22,8 @@ class Enemy(Sprite):
         self.image = self.animation.imagerect()
         self.rect = self.image.get_rect()
 
+        self.sur = pygame.Surface((32,32))
+
         self.rect.centerx = self.screen_rect.centerx
         self.rect.centery = self.screen_rect.centery
         self.rect.bottom = self.screen_rect.bottom
@@ -36,13 +38,21 @@ class Enemy(Sprite):
         self.moving_right = False
         self.direction = 1
 
+        #collision flags
+        self.floor = False
+        self.brick = False
+        self.obstacleL = False
+        self.obstacleR = False
+
         # death flag
         self.died = False
 
     def blitme(self):
         if self.died:
+            self.sur = self.image
             self.screen.blit(pygame.transform.flip(self.image, False, True), self.rect)
         if not self.died:
+            self.sur = self.image
             self.screen.blit(self.image, self.rect)
 
     def update(self):
@@ -52,10 +62,12 @@ class Enemy(Sprite):
 
         if not self.died:
             self.image = self.walk_list[self.animation.frame_index()]
-            if self.rect.right >= self.screen_rect.centerx + 150:
+            if self.obstacleR:
                 self.direction *= -1
-            elif self.rect.left <= self.screen_rect.centerx - 150:
+                print("going left")
+            elif self.obstacleL:
                 self.direction *= -1
+                print("going right")
 
         if self.died:
             self.direction = 0
@@ -75,7 +87,6 @@ class Goomba(Enemy):
     def __init__(self, screen):
         sprite_sheet = SpriteSheet("images/enemies.png")
         self.goombas = []
-        self.goombas_died = []
         image = pygame.transform.scale(sprite_sheet.get_image(0, 4, 16, 16), (32, 32))
         self.goombas.append(image)
         image = pygame.transform.scale(sprite_sheet.get_image(30, 4, 16, 16), (32, 32))

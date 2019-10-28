@@ -17,6 +17,9 @@ class Koopa(Sprite):
         self.walk_list_right = walk_list_right
         self.shell_list = shell_list
         self.sur = pygame.Surface((32,32))
+        # self.rect = self.sur.get_rect()
+        # self.x = self.rect.x
+        # self.y = self.rect.y
         # Timer class to animate sprites
         self.animation = Timer(frames=self.walk_list_left)
         self.animation = Timer(frames=self.walk_list_right)
@@ -34,12 +37,12 @@ class Koopa(Sprite):
         self.rect.bottom = self.screen_rect.bottom
 
         # store objects exact position
-        self.x = float(self.rect.centerx)
+        self.middle_x = float(self.rect.centerx)
 
         # movement flags
-        self.moving_left = False
-        self.moving_right = True
-        self.direction = 1
+        self.moving_left = True
+        self.moving_right = False
+        self.direction = -1
 
         # shell flag
         self.shell_mode = False
@@ -56,18 +59,20 @@ class Koopa(Sprite):
             self.sur = self.imageLeft
             self.screen.blit(self.imageLeft, self.rect)
         if self.moving_right:
-            self.screen.blit(self.imageRight, self.rect)
             self.sur = self.imageRight
+            self.screen.blit(self.imageRight, self.rect)
         # TODO: handle blitme when the koopa is in shell mode
         if self.shell_mode:
+            self.sur = self.imageShell
             self.screen.blit(self.imageShell, self.rect)
         if self.shell_mode_moving:
+            self.sur = self.imageShell
             self.screen.blit(self.imageShell, self.rect)
 
     def update(self):
-        self.x += (1 * self.direction)
+        self.middle_x += (1 * self.direction)
         # (2 * self.direction)
-        self.rect.x = self.x
+        self.rect.x = self.middle_x
 
         if self.obstacleR:
             self.direction *= -1

@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b65bc71-579f-4378-8aaa-d0e1cc8e1d7e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/Truong.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/EnemySettings.txt" beforeDir="false" afterPath="$PROJECT_DIR$/EnemySettings.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/GameFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Koopa.py" beforeDir="false" afterPath="$PROJECT_DIR$/Koopa.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Levels.py" beforeDir="false" afterPath="$PROJECT_DIR$/Levels.py" afterDir="false" />

@@ -98,11 +98,11 @@ def check_mario_enemy_collision(screen, mario, enemies, koopas):
                     # enemies.clear()
                     # create_koopa(screen=screen, koopas=koopas)
                     # mario.reset_level()
-            if mario.rect.bottom > koopa.rect.top - 5 and mario.center > koopa.x and koopa.shell_mode:
+            if mario.rect.bottom > koopa.rect.top - 5 and mario.center > koopa.middle_x and koopa.shell_mode:
                 koopa.shell_mode = False
                 koopa.direction = 1
                 koopa.shell_mode_moving = True
-            if mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.x and koopa.shell_mode:
+            if mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.middle_x and koopa.shell_mode:
                 koopa.shell_mode = False
                 koopa.direction = -1
                 koopa.shell_mode_moving = True
@@ -282,10 +282,12 @@ def update_items(items):
     for item in items:
         item.update()
 
-def update_screen(screen, mario, level, koopas):
+def update_screen(screen, mario, level, koopas, enemies):
     screen.fill(constants.bg_color)
     level.blitme()
     for koopa in koopas:
         koopa.blitme()
+    for enemy in enemies:
+        enemy.blitme()
     mario.blitme()
     pygame.display.flip()

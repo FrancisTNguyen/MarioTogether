@@ -2,7 +2,8 @@ import pygame
 import Mario
 # import Enemies
 import Brick
-import Koopa
+from Koopa import RegularKoopa
+from enemies import Goomba
 # import Scoreboard
 BLACK = (0,0,0)
 CREATE = False
@@ -16,6 +17,7 @@ class Level():
         self.screen = screen
         self.rect = self.image.get_rect()
         self.environment = []
+        self.enemy_environment = []
         self.start_x = 0
         self.start_y = 0
         self.end_x = 960
@@ -31,8 +33,12 @@ class Level():
 
     def blitme(self):
         self.screen.blit(pygame.transform.scale(self.image,(6784,960)), (0,0,960,470), (self.start_x,self.start_y,self.end_x,self.end_y))
+        print(self.enemy_environment)
         for object in self.environment:
             self.screen.blit(object.sur,object.rect)
+        for object in self.enemy_environment:
+            self.screen.blit(object.sur, object.rect)
+
 
     def update(self):
         self.step()
@@ -40,6 +46,8 @@ class Level():
             self.end_x += SPEED
             self.start_x += SPEED
             for object in self.environment:
+                object.rect.left -= SPEED
+            for object in self.enemy_environment:
                 object.rect.left -= SPEED
 
     def create_rects(self):
@@ -62,10 +70,16 @@ class Level():
             for line in f:
                 type, width, height, x, y = line.split()
                 if type == "Koopa":
-                    koopa = Koopa.RegularKoopa(self.screen)
+                    koopa = RegularKoopa(self.screen)
+                    # koopa.rect = koopa.sur.get_rect()
                     koopa.rect.x = int(x)
                     koopa.rect.y = int(y)
-                    self.environment.append(koopa)
+                    self.enemy_environment.append(koopa)
+                if type == "Goomba":
+                    goomba = Goomba(self.screen)
+                    goomba.rect.x = int(x)
+                    goomba.rect.y = int(y)
+                    self.enemy_environment.append(goomba)
 
     def create_obstacle(self, width, height, x, y):
         box = Brick.Pipe(width, height, x, y)
