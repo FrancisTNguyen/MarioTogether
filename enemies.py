@@ -34,9 +34,9 @@ class Enemy(Sprite):
 
         # movement flags
         self.death_jump = 0
-        self.moving_left = False
+        self.moving_left = True
         self.moving_right = False
-        self.direction = 1
+        self.direction = -1
 
         #collision flags
         self.floor = False
@@ -64,9 +64,13 @@ class Enemy(Sprite):
             self.image = self.walk_list[self.animation.frame_index()]
             if self.obstacleR:
                 self.direction *= -1
+                self.moving_left = True
+                self.moving_right = False
                 print("going left")
             elif self.obstacleL:
                 self.direction *= -1
+                self.moving_left = False
+                self.moving_right = True
                 print("going right")
 
         if self.died:

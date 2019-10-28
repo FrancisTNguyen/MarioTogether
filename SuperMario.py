@@ -31,6 +31,7 @@ while True:
     gf.check_collisiontype(mario=mario, level=level)
     gf.check_collisiontype_goomba(level=level, enemies=enemies)
     gf.check_collisiontype_koopa(level=level, koopas=koopas)
+    gf.check_koopa_enemy_collision(enemies=enemies, koopas=koopas)
     gf.check_mario_enemy_collision(screen=screen, mario=mario, enemies=enemies, koopas=koopas)
     gf.update_screen(screen = screen, mario = mario, level = level, koopas=koopas, enemies=enemies)
 

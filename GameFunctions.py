@@ -87,25 +87,36 @@ def check_mario_enemy_collision(screen, mario, enemies, koopas):
             print("hi")
             if mario.rect.bottom > koopa.rect.top - 10:
                 mario.jump()
-                koopa.shell_mode = True
-            elif mario.rect.right >= koopa.rect.left and not mario.invincible:
+                if koopa.shell_mode_moving:
+                    koopa.shell_mode = True
+                    koopa.shell_mode_moving = False
+                elif not koopa.shell_mode_moving:
+                    koopa.shell_mode = True
+            elif mario.rect.right >= koopa.rect.left and not mario.invincible and koopa.shell_mode_moving:
                 if mario.break_brick:
                     mario.become_small()
                     break
                 else:
-                    pass
-                    # mario.death_animation()
-                    # enemies.clear()
-                    # create_koopa(screen=screen, koopas=koopas)
-                    # mario.reset_level()
+                    print("died")
+                    mario.death_animation()
+                    enemies.clear()
+                    create_koopa(screen=screen, koopas=koopas)
+                    mario.reset_level()
             if mario.rect.bottom > koopa.rect.top - 5 and mario.center > koopa.middle_x and koopa.shell_mode:
-                koopa.shell_mode = False
-                koopa.direction = 1
-                koopa.shell_mode_moving = True
-            if mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.middle_x and koopa.shell_mode:
+                mario.jump
                 koopa.shell_mode = False
                 koopa.direction = -1
                 koopa.shell_mode_moving = True
+            if mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.middle_x and koopa.shell_mode:
+                mario.jump()
+                koopa.shell_mode = False
+                koopa.direction = 1
+                koopa.shell_mode_moving = True
+            # if mario.rect.bottom > koopa.rect.top - 5 and koopa.shell_mode_moving:
+                # mario.jump()
+                # koopa.shell_mode_moving = False
+                # koopa.direction = 0
+                # koopa.shell_mode = True
 
 
 def check_mario_item_collision(screen, mario, items):
