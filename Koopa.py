@@ -57,6 +57,7 @@ class Koopa(Sprite):
     def blitme(self):
         if self.moving_left:
             self.sur = self.imageLeft
+            print("moving left")
             self.screen.blit(self.imageLeft, self.rect)
         if self.moving_right:
             self.sur = self.imageRight
@@ -75,13 +76,22 @@ class Koopa(Sprite):
         self.rect.x = self.middle_x
 
         if self.obstacleR:
+            self.sur = self.imageLeft
             self.direction *= -1
             self.moving_left = True
             self.moving_right = False
         elif self.obstacleL:
+            self.sur = self.imageRight
             self.direction *= -1
             self.moving_right = True
             self.moving_left = False
+
+        if self.obstacleR and self.shell_mode_moving:
+            self.sur = self.imageShell
+            self.direction *= - 1
+        if self.obstacleL and self.shell_mode_moving:
+            self.sur = self.imageShell
+            self.direction *= 1
         if self.moving_left:
             self.imageLeft = self.walk_list_left[self.animation.frame_index()]
         if self.moving_right:

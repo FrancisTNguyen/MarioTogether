@@ -35,10 +35,9 @@ class Level():
         self.screen.blit(pygame.transform.scale(self.image,(6784,960)), (0,0,960,470), (self.start_x,self.start_y,self.end_x,self.end_y))
         print(self.enemy_environment)
         for object in self.environment:
-            self.screen.blit(object.sur,object.rect)
+            self.screen.blit(object.sur, object.rect)
         for object in self.enemy_environment:
             self.screen.blit(object.sur, object.rect)
-
 
     def update(self):
         self.step()
