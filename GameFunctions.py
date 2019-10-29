@@ -243,6 +243,16 @@ def check_collisiontype_koopa(level, koopas):
                 koopa.obstacleL = True
                 koopa.rect.left = 0
 
+def edge_koopa_collision(koopas):
+    for koopa in koopas:
+        if koopa.rect.x <= 0 or koopa.rect.x >= constants.WINDOW_WIDTH:
+            koopas.remove(koopa)
+
+
+def edge_goomba_collision(enemies):
+    for enemy in enemies:
+        if enemy.rect.x <= 0 or enemy.rect.x >= constants.WINDOW_WIDTH:
+            enemies.remove(enemy)
 
 
 def check_collisiontype(level, mario):
@@ -296,9 +306,9 @@ def updateLevel(level, mario):
 def update_mario(mario):
     mario.update()
 
-def update_enemies(enemies):
+def update_enemies(enemies, level):
     for enemy in enemies:
-        enemy.update()
+        enemy.update(level)
 
 def update_koopas(koopas, level):
     for koopa in koopas:

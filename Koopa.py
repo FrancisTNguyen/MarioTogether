@@ -43,7 +43,7 @@ class Koopa(Sprite):
         # movement flags
         self.moving_left = True
         self.moving_right = False
-        self.direction = -1
+        self.direction = -3
 
         # shell flag
         self.shell_mode = False
@@ -74,13 +74,13 @@ class Koopa(Sprite):
 
     def update(self, level):
 
+        self.middle_x += (1 * self.direction)
+        # (2 * self.direction)
+        self.rect.x = self.middle_x
+
         if level.move:
             self.rect.left -= (SPEED + self.direction)
-
         else:
-            self.middle_x += (1 * self.direction)
-            # (2 * self.direction)
-            self.rect.x = self.middle_x
 
             if self.direction == 1:
                 if self.obstacleR:
@@ -120,7 +120,7 @@ class Koopa(Sprite):
                         self.direction *= -1
                 elif self.direction == -1:
                     if self.obstacleL:
-                        self.direction *= 1
+                        self.direction *= -1
                 self.imageShell = self.shell_list[self.animation.frame_index()]
                 print("moving")
 
