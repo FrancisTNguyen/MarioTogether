@@ -2,6 +2,7 @@ import pygame
 from pygame.sprite import Sprite
 from spritesheet import SpriteSheet
 from Timer import Timer
+from Levels import *
 
 
 class Koopa(Sprite):
@@ -57,6 +58,7 @@ class Koopa(Sprite):
     def blitme(self):
         if self.moving_left:
             self.sur = self.imageLeft
+            print(self.sur)
             print("moving left")
             self.screen.blit(self.imageLeft, self.rect)
         if self.moving_right:
@@ -70,50 +72,57 @@ class Koopa(Sprite):
             self.sur = self.imageShell
             self.screen.blit(self.imageShell, self.rect)
 
-    def update(self):
-        self.middle_x += (1 * self.direction)
-        # (2 * self.direction)
-        self.rect.x = self.middle_x
+    def update(self, level):
 
-        if self.obstacleR:
-            self.sur = self.imageLeft
-            self.direction *= -1
-            self.moving_left = True
-            self.moving_right = False
-        elif self.obstacleL:
-            self.sur = self.imageRight
-            self.direction *= -1
-            self.moving_right = True
-            self.moving_left = False
+        if level.move:
+            self.rect.left -= (SPEED + self.direction)
 
-        if self.obstacleR and self.shell_mode_moving:
-            self.sur = self.imageShell
-            self.direction *= - 1
-        if self.obstacleL and self.shell_mode_moving:
-            self.sur = self.imageShell
-            self.direction *= 1
-        if self.moving_left:
-            self.imageLeft = self.walk_list_left[self.animation.frame_index()]
-        if self.moving_right:
-            self.imageRight = self.walk_list_right[self.animation.frame_index()]
-        # TODO: handle movement when turtle is in shell mode
-        if self.shell_mode:
-            self.moving_right = False
-            self.moving_left = False
-            self.direction = 0
-            self.imageShell = self.shell_list[self.animation.frame_index()]
-            print("static")
-        if self.shell_mode_moving:
-            self.moving_right = False
-            self.moving_left = False
+        else:
+            self.middle_x += (1 * self.direction)
+            # (2 * self.direction)
+            self.rect.x = self.middle_x
+
             if self.direction == 1:
                 if self.obstacleR:
+                    self.sur = self.imageLeft
                     self.direction *= -1
-            if self.direction == -1:
+                    self.moving_left = True
+                    self.moving_right = False
+            elif self.direction == -1:
                 if self.obstacleL:
-                    self.direction *= 1
-            self.imageShell = self.shell_list[self.animation.frame_index()]
-            print("moving")
+                    self.sur = self.imageRight
+                    self.direction *= -1
+                    self.moving_right = True
+                    self.moving_left = False
+
+            if self.obstacleR and self.shell_mode_moving:
+                self.sur = self.imageShell
+                self.direction *= - 1
+            if self.obstacleL and self.shell_mode_moving:
+                self.sur = self.imageShell
+                self.direction *= 1
+            if self.moving_left:
+                self.imageLeft = self.walk_list_left[self.animation.frame_index()]
+            if self.moving_right:
+                self.imageRight = self.walk_list_right[self.animation.frame_index()]
+            # TODO: handle movement when turtle is in shell mode
+            if self.shell_mode:
+                self.moving_right = False
+                self.moving_left = False
+                self.direction = 0
+                self.imageShell = self.shell_list[self.animation.frame_index()]
+                print("static")
+            elif self.shell_mode_moving:
+                self.moving_right = False
+                self.moving_left = False
+                if self.direction == 1:
+                    if self.obstacleR:
+                        self.direction *= -1
+                elif self.direction == -1:
+                    if self.obstacleL:
+                        self.direction *= 1
+                self.imageShell = self.shell_list[self.animation.frame_index()]
+                print("moving")
 
 
 class RegularKoopa(Koopa):

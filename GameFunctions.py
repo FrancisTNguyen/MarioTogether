@@ -3,6 +3,7 @@ import constants
 from pygame.locals import *
 from Koopa import RegularKoopa
 from enemies import Goomba
+from PiranhaPlant import UnderGroundPiranha
 from Timer import Timer
 
 
@@ -61,13 +62,15 @@ def check_koopa_enemy_collision(enemies, koopas):
                     enemy.died = True
 
 
-def check_mario_enemy_collision(screen, mario, enemies, koopas):
+def check_mario_enemy_collision(screen, mario, enemies, koopas, piranhas):
     for enemy in enemies:
         #if pygame.sprite.collide_rect(mario, enemy):
         if mario.rect.colliderect(enemy):
             # base statement, if mario jumps on top of enemy, kills them
-            if enemy.rect.top - 5 <= mario.rect.bottom <= enemy.rect.top + 5:
-                enemies.remove(enemy)
+            if mario.rect.bottom > enemy.rect.top - 5:
+                enemy.squashed = True
+                mario.jump()
+                # enemies.remove(enemy)
             # mario touches enemy
             elif mario.rect.right >= enemy.rect.left and not mario.invincible:
                 if mario.break_brick:
@@ -82,16 +85,24 @@ def check_mario_enemy_collision(screen, mario, enemies, koopas):
                     # create_goomba(screen=screen,enemies=enemies)
                     # mario.reset_level()
 
+    for piranha in piranhas:
+        if pygame.sprite.collide_rect(mario, piranha):
+            print("Piranha hit Mario")
+
     for koopa in koopas:
         if mario.rect.colliderect(koopa):
             print("hi")
-            if mario.rect.bottom > koopa.rect.top - 10:
+            if mario.rect.bottom > koopa.rect.top - 5:
                 mario.jump()
-                if koopa.shell_mode_moving:
+                if koopa.shell_mode:
+                    koopa.shell_mode = False
+                    koopa.shell_mode_moving = True
+                elif koopa.shell_mode_moving:
                     koopa.shell_mode = True
                     koopa.shell_mode_moving = False
-                elif not koopa.shell_mode_moving:
+                elif not koopa.shell_mode and not koopa.shell_mode_moving:
                     koopa.shell_mode = True
+                    koopa.shell_mode_moving = False
             elif mario.rect.right >= koopa.rect.left and not mario.invincible and koopa.shell_mode_moving:
                 if mario.break_brick:
                     mario.become_small()
@@ -102,12 +113,12 @@ def check_mario_enemy_collision(screen, mario, enemies, koopas):
                     enemies.clear()
                     create_koopa(screen=screen, koopas=koopas)
                     mario.reset_level()
-            if mario.rect.bottom > koopa.rect.top - 5 and mario.center > koopa.middle_x and koopa.shell_mode:
+            if mario.rect.bottom > koopa.rect.top + 5 and mario.center > koopa.middle_x and koopa.shell_mode:
                 mario.jump
                 koopa.shell_mode = False
                 koopa.direction = -1
                 koopa.shell_mode_moving = True
-            if mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.middle_x and koopa.shell_mode:
+            elif mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.middle_x and koopa.shell_mode:
                 mario.jump()
                 koopa.shell_mode = False
                 koopa.direction = 1
@@ -137,6 +148,10 @@ def create_koopa(screen, koopas):
     koopa = RegularKoopa(screen=screen)
     koopas.append(koopa)
 
+
+def create_piranha(screen, piranhas):
+    piranha = UnderGroundPiranha(screen=screen)
+    piranhas.append(piranha)
 
 def check_collisiontype_goomba(level, enemies):
     for blocks in level.environment:
@@ -285,20 +300,26 @@ def update_enemies(enemies):
     for enemy in enemies:
         enemy.update()
 
-def update_koopas(koopas):
+def update_koopas(koopas, level):
     for koopa in koopas:
-        koopa.update()
+        koopa.update(level)
+
+def update_piranhas(piranhas):
+    for piranha in piranhas:
+        piranha.update()
 
 def update_items(items):
     for item in items:
         item.update()
 
-def update_screen(screen, mario, level, koopas, enemies):
+def update_screen(screen, mario, level, koopas, enemies, piranhas):
     screen.fill(constants.bg_color)
     level.blitme()
     for koopa in koopas:
         koopa.blitme()
     for enemy in enemies:
         enemy.blitme()
+    for piranha in piranhas:
+        piranha.blitme()
     mario.blitme()
     pygame.display.flip()

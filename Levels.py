@@ -2,8 +2,8 @@ import pygame
 import Mario
 # import Enemies
 import Brick
-from Koopa import RegularKoopa
-from enemies import Goomba
+# from enemies import Goomba
+# from Koopa import RegularKoopa
 # import Scoreboard
 BLACK = (0,0,0)
 CREATE = False
@@ -36,8 +36,8 @@ class Level():
         print(self.enemy_environment)
         for object in self.environment:
             self.screen.blit(object.sur, object.rect)
-        for object in self.enemy_environment:
-            self.screen.blit(object.sur, object.rect)
+        # for object in self.enemy_environment:
+            # self.screen.blit(object.sur, object.rect)
 
     def update(self):
         self.step()
@@ -46,8 +46,8 @@ class Level():
             self.start_x += SPEED
             for object in self.environment:
                 object.rect.left -= SPEED
-            for object in self.enemy_environment:
-                object.rect.left -= SPEED
+            # for object in self.enemy_environment:
+                # object.rect.left -= SPEED
 
     def create_rects(self):
         with open('LevelSettings.txt') as f:
@@ -64,7 +64,7 @@ class Level():
                 if type == 'Floor':
                     self.create_floor(width=int(width),height=int(height),x=int(x),y=int(y))
 
-    def create_enemies(self):
+    """def create_enemies(self):
         with open('EnemySettings.txt') as f:
             for line in f:
                 type, width, height, x, y = line.split()
@@ -78,7 +78,7 @@ class Level():
                     goomba = Goomba(self.screen)
                     goomba.rect.x = int(x)
                     goomba.rect.y = int(y)
-                    self.enemy_environment.append(goomba)
+                    self.enemy_environment.append(goomba)"""
 
     def create_obstacle(self, width, height, x, y):
         box = Brick.Pipe(width, height, x, y)

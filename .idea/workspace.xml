@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1b65bc71-579f-4378-8aaa-d0e1cc8e1d7e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/MarioTogether.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MarioTogether.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/GameFunctions.py" beforeDir="false" afterPath="$PROJECT_DIR$/GameFunctions.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Koopa.py" beforeDir="false" afterPath="$PROJECT_DIR$/Koopa.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SuperMario.py" beforeDir="false" afterPath="$PROJECT_DIR$/SuperMario.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/enemies.py" beforeDir="false" afterPath="$PROJECT_DIR$/enemies.py" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/Koopa.py" beforeDir="false" afterPath="$PROJECT_DIR$/Koopa.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Levels.py" beforeDir="false" afterPath="$PROJECT_DIR$/Levels.py" afterDir="false" />
+>>>>>>> 76f594a67afe424bb418e956dfdc2430b267cb85
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,6 +28,7 @@
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">

@@ -5,7 +5,7 @@ from Timer import Timer
 
 
 class Enemy(Sprite):
-    def __init__(self, screen, walk_list):
+    def __init__(self, screen, walk_list, squashed_list):
         super(Enemy, self).__init__()
 
         # get screen dimensions
@@ -14,6 +14,7 @@ class Enemy(Sprite):
 
         # list to hold animation images
         self.walk_list = walk_list
+        self.squashed_list = squashed_list
 
         # Timer class to animate sprites
         self.animation = Timer(frames=self.walk_list)
@@ -21,6 +22,8 @@ class Enemy(Sprite):
         # get the rect of the image
         self.image = self.animation.imagerect()
         self.rect = self.image.get_rect()
+        self.squashed_image = self.animation.imagerect()
+        self.rect = self.squashed_image.get_rect()
 
         self.sur = pygame.Surface((32,32))
 
@@ -34,9 +37,9 @@ class Enemy(Sprite):
 
         # movement flags
         self.death_jump = 0
-        self.moving_left = True
-        self.moving_right = False
-        self.direction = -1
+        self.moving_left = False
+        self.moving_right = True
+        self.direction = 1
 
         #collision flags
         self.floor = False
@@ -46,32 +49,38 @@ class Enemy(Sprite):
 
         # death flag
         self.died = False
+        self.squashed = False
 
     def blitme(self):
         if self.died:
             self.sur = self.image
             self.screen.blit(pygame.transform.flip(self.image, False, True), self.rect)
-        if not self.died:
+        if not self.died and not self.squashed:
             self.sur = self.image
             self.screen.blit(self.image, self.rect)
+        if self.squashed:
+            self.sur = self.squashed_image
+            self.screen.blit(self.squashed_image, self.rect)
 
     def update(self):
         self.x += (0.5 * self.direction)
         self.rect.x = self.x
         # self.image = self.walk_list[self.animation.frame_index()]
 
-        if not self.died:
+        if not self.died and not self.squashed:
             self.image = self.walk_list[self.animation.frame_index()]
-            if self.obstacleR:
-                self.direction *= -1
-                self.moving_left = True
-                self.moving_right = False
-                print("going left")
-            elif self.obstacleL:
-                self.direction *= -1
-                self.moving_left = False
-                self.moving_right = True
-                print("going right")
+            if self.direction == 1:
+                if self.obstacleR:
+                    self.direction *= -1
+                    self.moving_left = True
+                    self.moving_right = False
+                    print("going left")
+            elif self.direction == -1:
+                if self.obstacleL:
+                    self.direction *= -1
+                    self.moving_left = False
+                    self.moving_right = True
+                    print("going right")
 
         if self.died:
             self.direction = 0
@@ -84,6 +93,10 @@ class Enemy(Sprite):
                     print("goes here")
                     self.rect.y += self.death_jump
 
+        if self.squashed:
+            self.direction = 0
+            self.squashed_image = self.squashed_list[self.animation.frame_index()]
+
             # self.rect.y += self.death_jump
 
 
@@ -91,11 +104,16 @@ class Goomba(Enemy):
     def __init__(self, screen):
         sprite_sheet = SpriteSheet("images/enemies.png")
         self.goombas = []
+        self.goombas_squashed = []
         image = pygame.transform.scale(sprite_sheet.get_image(0, 4, 16, 16), (32, 32))
         self.goombas.append(image)
         image = pygame.transform.scale(sprite_sheet.get_image(30, 4, 16, 16), (32, 32))
         self.goombas.append(image)
+        squashed_image = pygame.transform.scale(sprite_sheet.get_image(60, 4, 16, 16), (32, 32))
+        self.goombas_squashed.append(squashed_image)
+        squashed_image = pygame.transform.scale(sprite_sheet.get_image(60, 4, 16, 16), (32, 32))
+        self.goombas_squashed.append(squashed_image)
         # next image for squished goomba
         """image = pygame.transform.scale(sprite_sheet.get_image(60, 5, 16, 16), (30, 30))
         self.goombas.append(image)"""
-        super().__init__(screen=screen, walk_list=self.goombas)
+        super().__init__(screen=screen, walk_list=self.goombas, squashed_list=self.goombas_squashed)
