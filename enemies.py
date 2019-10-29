@@ -40,7 +40,7 @@ class Enemy(Sprite):
         self.death_jump = 0
         self.moving_left = True
         self.moving_right = False
-        self.direction = -2
+        self.direction = -1
 
         #collision flags
         self.floor = False
@@ -64,23 +64,25 @@ class Enemy(Sprite):
             self.screen.blit(self.squashed_image, self.rect)
 
     def update(self, level):
-        self.x += (1 * self.direction)
+        self.x += (2 * self.direction)
         self.rect.x = self.x
         # self.image = self.walk_list[self.animation.frame_index()]
 
         if level.move:
+            level.SPEED = 20
             self.rect.left -= (SPEED + self.direction)
+
         else:
 
             if not self.died and not self.squashed:
                 self.image = self.walk_list[self.animation.frame_index()]
-                if self.direction == 1:
+                if self.direction > 0:
                     if self.obstacleR:
                         self.direction *= -1
                         self.moving_left = True
                         self.moving_right = False
                         print("going left")
-                elif self.direction == -1:
+                elif self.direction < 0:
                     if self.obstacleL:
                         self.direction *= -1
                         self.moving_left = False

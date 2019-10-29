@@ -19,9 +19,14 @@ level = Level(screen)
 level.create_rects()
 # level.create_enemies()
 goomba = Goomba(screen=screen)
-enemies = [goomba]
+goomba2 = Goomba(screen=screen)
+goomba3 = Goomba(screen=screen)
+goomba4 = Goomba(screen=screen)
+goomba2.x = 1100
+enemies = [goomba, goomba2]
 koopa = RegularKoopa(screen=screen)
-koopas = [koopa]
+koopa2 = RegularKoopa(screen=screen)
+koopas = []
 piranha = UnderGroundPiranha(screen=screen)
 piranhas = [piranha]
 

@@ -70,7 +70,7 @@ def check_mario_enemy_collision(screen, mario, enemies, koopas, piranhas):
             if mario.rect.bottom > enemy.rect.top - 5:
                 enemy.squashed = True
                 mario.jump()
-                # enemies.remove(enemy)
+                enemies.remove(enemy)
             # mario touches enemy
             elif mario.rect.right >= enemy.rect.left and not mario.invincible:
                 if mario.break_brick:
@@ -245,13 +245,13 @@ def check_collisiontype_koopa(level, koopas):
 
 def edge_koopa_collision(koopas):
     for koopa in koopas:
-        if koopa.rect.x <= 0 or koopa.rect.x >= constants.WINDOW_WIDTH:
+        if koopa.rect.x <= 0:
             koopas.remove(koopa)
 
 
 def edge_goomba_collision(enemies):
     for enemy in enemies:
-        if enemy.rect.x <= 0 or enemy.rect.x >= constants.WINDOW_WIDTH:
+        if enemy.rect.x <= 0:
             enemies.remove(enemy)
 
 

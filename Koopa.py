@@ -17,8 +17,6 @@ class Koopa(Sprite):
         self.walk_list_left = walk_list_left
         self.walk_list_right = walk_list_right
         self.shell_list = shell_list
-        self.sur = pygame.Surface((32,32))
-        # self.rect = self.sur.get_rect()
         # self.x = self.rect.x
         # self.y = self.rect.y
         # Timer class to animate sprites
@@ -43,7 +41,7 @@ class Koopa(Sprite):
         # movement flags
         self.moving_left = True
         self.moving_right = False
-        self.direction = -3
+        self.direction = -2
 
         # shell flag
         self.shell_mode = False
