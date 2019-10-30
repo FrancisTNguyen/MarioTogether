@@ -27,13 +27,13 @@ goomba6 = Goomba(screen=screen)
 goomba2.x = 1100
 goomba3.x = 1500
 goomba4.x = 1550
-goomba5.x = 1700
+goomba5.x = 1750
 goomba6.x = 1800
 enemies = [goomba, goomba2, goomba3, goomba4, goomba5, goomba6]
 koopa = RegularKoopa(screen=screen)
 koopa2 = RegularKoopa(screen=screen)
 koopa.middle_x = 700
-koopa2.middle_x = 1850
+koopa2.middle_x = 1000
 koopas = [koopa, koopa2]
 piranha = UnderGroundPiranha(screen=screen)
 piranhas = []
