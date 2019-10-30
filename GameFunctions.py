@@ -113,15 +113,17 @@ def check_mario_enemy_collision(screen, mario, enemies, koopas, piranhas):
                     enemies.clear()
                     create_koopa(screen=screen, koopas=koopas)
                     mario.reset_level()
-            if mario.rect.bottom > koopa.rect.top + 5 and mario.center > koopa.middle_x and koopa.shell_mode:
+            if mario.rect.bottom > koopa.rect.top + 5 and mario.center > koopa.middle_x and (koopa.shell_mode or koopa.shell_mode_moving):
                 mario.jump
                 koopa.shell_mode = False
-                koopa.direction = -1
+                koopa.direction = -2
+                print("moving right")
                 koopa.shell_mode_moving = True
-            elif mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.middle_x and koopa.shell_mode:
+            elif mario.rect.bottom > koopa.rect.top - 5 and mario.center < koopa.middle_x and (koopa.shell_mode or koopa.shell_mode_moving):
                 mario.jump()
                 koopa.shell_mode = False
-                koopa.direction = 1
+                koopa.direction = 2
+                print("moving left")
                 koopa.shell_mode_moving = True
             # if mario.rect.bottom > koopa.rect.top - 5 and koopa.shell_mode_moving:
                 # mario.jump()

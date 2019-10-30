@@ -22,13 +22,21 @@ goomba = Goomba(screen=screen)
 goomba2 = Goomba(screen=screen)
 goomba3 = Goomba(screen=screen)
 goomba4 = Goomba(screen=screen)
+goomba5 = Goomba(screen=screen)
+goomba6 = Goomba(screen=screen)
 goomba2.x = 1100
-enemies = [goomba, goomba2]
+goomba3.x = 1500
+goomba4.x = 1550
+goomba5.x = 1700
+goomba6.x = 1800
+enemies = [goomba, goomba2, goomba3, goomba4, goomba5, goomba6]
 koopa = RegularKoopa(screen=screen)
 koopa2 = RegularKoopa(screen=screen)
-koopas = []
+koopa.middle_x = 700
+koopa2.middle_x = 1850
+koopas = [koopa, koopa2]
 piranha = UnderGroundPiranha(screen=screen)
-piranhas = [piranha]
+piranhas = []
 
 while True:
     gf.check_events(screen = screen, mario = mario)
